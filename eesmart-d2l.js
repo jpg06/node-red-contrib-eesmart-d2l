@@ -387,7 +387,7 @@ module.exports = function (RED) {
                     break;
 
             }
-
+	    node.status({fill:'green',shape:'dot',text:'Conso: '+msg.payload.IINST1+ ' A'});
             node.send(sendData);
         });
     }

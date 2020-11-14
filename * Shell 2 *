@@ -1,0 +1,60 @@
+
+Type joehelp for editor shell commands
+
+root@maisonbase:/home/nodered/jpgDomotique/node-red-contrib-eesmart-d2l# git commit
+[7m    I    /home/nodered/jpgDomotique/node-red-contrib-eesmart-d2l/.git/COMMIT_EDITMSG (Modifié)(git-commit)                                                                   Row 1    Col 7   
+test 1
+[32m# Veuillez saisir le message de validation pour vos modifications. Les lignes
+[32m# commençant par '#' seront ignorées, et un message vide abandonne la validation.
+[32m#
+[32m# Sur la branche main
+[32m# Votre branche est à jour avec 'origin/main'.
+[32m#
+[32m# Modifications qui seront validées :
+[32m#       modifié :         eesmart-d2l.js
+[32m#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[7m
