@@ -387,7 +387,7 @@ module.exports = function (RED) {
                     break;
 
             }
-	    node.status({fill:'green',shape:'dot',text:'Conso: '+msg.payload.IINST1+ ' A'});
+	    node.status({fill:'green',shape:'dot',text:'Conso: '+msg.payload.IINST1+ ' A / '+msg.payload.IINST1*220+' VA'});
             node.send(sendData);
         });
     }
