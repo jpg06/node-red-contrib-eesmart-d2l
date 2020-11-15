@@ -346,8 +346,50 @@ module.exports = function (RED) {
                             undefined
                         ]);
                         return;
-                    }
-
+                    } else {
+			switch(requestPayload.payload._TYPE_TRAME) {
+			    case 'HISTORIQUE' :	// Compteur Link en mode "HISTORIQUE"
+				if (!requestPayload.payload.hasOwnProperty('IINST')&&requestPayload.payload.hasOwnProperty('IINST1')) {
+				    requestPayload.payload.IINST=requestPayload.payload.IINST1;
+				    requestPayload.payload.IInst=parseInt(requestPayload.payload.IINST,10);
+				}
+				if (!requestPayload.payload.BASE && requestPayload.payload.HCHC) {
+				    requestPayload.payload.Base=parseInt(requestPayload.payload.HCHC,10)+parseInt(requestPayload.payload.HCHP,10);
+				    requestPayload.payload.BASE=String(requestPayload.payload.Base);
+				    requestPayload.payload.HcHc=parseInt(requestPayload.payload.HCHC,10);
+				    requestPayload.payload.HcHp=parseInt(requestPayload.payload.HCHP,10);
+				}
+				if (requestPayload.payload.IINST2=="0"&&requestPayload.payload.IINST3=="0"){
+				    // Le compteur n'est pas triphasé: supprimer les valeurs non utilisées
+				    delete requestPayload.payload.IINST1;
+				    delete requestPayload.payload.IINST2;
+				    delete requestPayload.payload.IINST3;
+				    requestPayload.payload.ADIR = requestPayload.payload.ADIR1;
+				    delete requestPayload.payload.ADIR1;
+				    delete requestPayload.payload.ADIR2;
+    				    delete requestPayload.payload.ADIR3;
+				}
+				if (!requestPayload.payload.EJPHN&&!requestPayload.payload.EJPHPM){
+				    // Tarif EJP non utilisé
+    				    delete requestPayload.payload.EJPHN;
+				    delete requestPayload.payload.EJPHPM;
+				}
+				if (!requestPayload.payload.BBRHCJB){
+				    // Tarif TEMPO utilisé
+				    delete requestPayload.payload.BBRHCJB;
+				    delete requestPayload.payload.BBRHPJB;
+				    delete requestPayload.payload.BBRHCJW;
+	    			    delete requestPayload.payload.BBRHPJW;
+				    delete requestPayload.payload.BBRHCJR;
+				    delete requestPayload.payload.BBRHPJR;
+				}
+				// Les valeurs entières correspondantes
+				requestPayload.payload.ISousc=parseInt(requestPayload.payload.ISOUSC,10);
+				requestPayload.payload.Charge=Math.round(requestPayload.payload.IInst / requestPayload.payload.ISousc * 100);
+				break;
+			    default : break;	// ToDo: mode normal
+			}
+		    }
                     sendData[0] = msg
                     sendData[0].topic = 'd2l_data'
                     sendData[0].payload = requestPayload.payload
@@ -387,7 +429,7 @@ module.exports = function (RED) {
                     break;
 
             }
-	    node.status({fill:'green',shape:'dot',text:'Conso: '+msg.payload.IINST1+ ' A / '+msg.payload.IINST1*220+' VA'});
+	    node.status({fill:'green',shape:'dot',text:'Conso: '+msg.payload.IINST+ ' A / '+msg.payload.IInst*220+' VA / '+msg.payload.Charge+'%'});
             node.send(sendData);
         });
     }
